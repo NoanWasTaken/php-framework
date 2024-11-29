@@ -33,7 +33,13 @@ class Router {
     }
 
     private static function checkUri(Request $request, object $route): bool {
-        return $route->path === $request->getUri();
+        $path = $route->path;
+        $uri = $request->getUri();
+
+        $path = preg_replace('/:\w+/', '([^/]+)', $path);
+        $path = str_replace('/', '\/', $path);
+
+        return preg_match('/^' . $path . '$/', $uri);
     }
 
     private static function getController(object $route): AbstractController {
@@ -49,7 +55,7 @@ class Router {
             throw new \Exception("Controller not found");
         }
 
-        return new $controllerNamespace();
+        return $controller;
     }
 
     private static function checkClassExists(string $controllerNamespace): bool {

@@ -11,7 +11,7 @@ class GetContactsController extends AbstractController {
         // check if the request content type is application/json
         $headers = $request->getHeaders();
         if ($headers['Content-Type'] !== 'application/json') {
-            return new Response(json_encode(['error' => 'Invalid Content-Type']), 400, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['error' => 'Invalid Content-Type']), 400);
         }
 
         // set the directory to read the contact files
@@ -24,6 +24,6 @@ class GetContactsController extends AbstractController {
         }
 
         // send the response
-        return new Response(json_encode($contacts), 200, ['Content-Type' => 'application/json']);
+        return new Response(json_encode($contacts), 200);
     }
 }
