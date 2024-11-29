@@ -12,7 +12,7 @@ class PostContactController extends AbstractController {
         // check if the request content type is application/json
         $headers = $request->getHeaders();
         if ($headers['Content-Type'] !== 'application/json') {
-            return new Response(json_encode(['error' => 'Invalid Content-Type']), 400, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['error' => 'Invalid Content-Type']), 400);
         }
 
         // set the data to check in the request body
@@ -20,7 +20,7 @@ class PostContactController extends AbstractController {
 
         // check request body
         if (!isset($data['email'], $data['subject'], $data['message']) || count($data) !== 3) {
-            return new Response(json_encode(['error' => 'Invalid request body']), 400, ['Content-Type' => 'application/json']);
+            return new Response(json_encode(['error' => 'Invalid request body']), 400);
         }
 
         // create new contact
@@ -33,6 +33,6 @@ class PostContactController extends AbstractController {
         file_put_contents("{$directory}/{$contact->getFilename()}", json_encode($contact->toArray()));
 
         // send the response
-        return new Response(json_encode(['file' => $contact->getFilename()]), 201, ['Content-Type' => 'application/json']);
+        return new Response(json_encode(['file' => $contact->getFilename()]), 201);
     }
 }
