@@ -23,5 +23,10 @@
     "path": "/contact/:email",
     "methods": ["PATCH"],
     "controller": "UpdateContactController"
+  },
+  {
+    "path": "/contact/:email",
+    "methods": ["DELETE"],
+    "controller": "DeleteContactController"
   }
 ]
