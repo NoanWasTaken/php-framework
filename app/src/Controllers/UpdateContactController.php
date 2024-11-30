@@ -17,15 +17,22 @@ class UpdateContactController extends AbstractController {
             return new Response(json_encode(['error' => 'Invalid Content-Type']), 400);
         }
 
-        // get the contact email from the uri
-        $params = Router::extractParams($request->getUri(), '/contact/:email');
+        // get the contact id from the uri
+        $params = Router::extractParams($request->getUri(), '/contact/:id');
         if (empty($params)) {
             return new Response(json_encode(['error' => 'Invalid URI']), 400);
         }
-        $email = $params[0];
+        $id = $params[0];
 
-        // find the contact by email
-        $contactFile = Contact::findByEmail($email);
+        // see if the id is an email or a filename
+        if (is_numeric($id[0])) {
+            // si id is a filename
+            $contactFile = Contact::findByFilename($id);
+        } else {
+            // si id is an email
+            $contactFile = Contact::findByEmail($id);
+        }
+
         if (!$contactFile) {
             return new Response(json_encode(['error' => 'Contact not found']), 404);
         }

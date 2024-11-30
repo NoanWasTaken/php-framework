@@ -10,7 +10,7 @@ class Response {
     public function __construct(string $content = '', int $status = 200, array $headers = []) {
         $this->content = $content;
         $this->status = $status;
-        //now returns application/json by default
+        //now returns application/json by default (je viens de me rendre compte que c'est pas la meilleure des idées de faire ça mais bon)
         $this->headers = array_merge(['Content-Type' => 'application/json'], $headers);
     }
 

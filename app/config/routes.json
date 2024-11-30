@@ -15,17 +15,17 @@
     "controller": "GetContactsController"
   },
   {
-    "path": "/contact/:email",
+    "path": "/contact/:id",
     "methods": ["GET"],
     "controller": "GetContactController"
   },
   {
-    "path": "/contact/:email",
+    "path": "/contact/:id",
     "methods": ["PATCH"],
     "controller": "UpdateContactController"
   },
   {
-    "path": "/contact/:email",
+    "path": "/contact/:id",
     "methods": ["DELETE"],
     "controller": "DeleteContactController"
   }

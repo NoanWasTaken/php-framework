@@ -33,8 +33,6 @@ class Contact {
         return "{$this->dateOfCreation}_{$this->email}.json";
     }
 
-
-    //made some changes for the program to be more "POO" (J'AI COMPRIS EDENN ENFIN)
     public static function findByEmail(string $email): ?string {
         $directory = __DIR__ . "/../../var/contacts";
         foreach (glob("{$directory}/*_{$email}.json") as $filename) {
@@ -43,10 +41,26 @@ class Contact {
         return null;
     }
 
+    //bonus exercise
+    public static function findByFilename(string $filename): ?string {
+        $directory = __DIR__ . "/../../var/contacts";
+        $filepath = "{$directory}/{$filename}.json";
+        return file_exists($filepath) ? $filepath : null;
+    }
+
     public static function deleteByEmail(string $email): bool {
         $filename = self::findByEmail($email);
         if ($filename) {
             return unlink($filename);
+        }
+        return false;
+    }
+
+    //bonus exercise²
+    public static function deleteByFilename(string $filename): bool {
+        $filepath = self::findByFilename($filename);
+        if ($filepath) {
+            return unlink($filepath);
         }
         return false;
     }
