@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Http\Request;
 use App\Http\Response;
+use App\Entities\Contact;
+use App\Http\Router;
 use DateTime;
 
 class UpdateContactController extends AbstractController {
@@ -15,24 +17,15 @@ class UpdateContactController extends AbstractController {
             return new Response(json_encode(['error' => 'Invalid Content-Type']), 400);
         }
 
-        $uri = $request->getUri();
-        
-        if (!preg_match('/^\/contact\/(.+)$/', $uri, $matches)) {
+        // get the contact email from the uri
+        $params = Router::extractParams($request->getUri(), '/contact/:email');
+        if (empty($params)) {
             return new Response(json_encode(['error' => 'Invalid URI']), 400);
         }
+        $email = $params[0];
 
-        $email = $matches[1];
-
-        $directory = __DIR__ . "/../../var/contacts";
-
-        // find the contact file by email
-        $contactFile = null;
-        foreach (glob("{$directory}/*_{$email}.json") as $filename) {
-            $contactFile = $filename;
-            break;
-        }
-
-        // check if the contact file exists
+        // find the contact by email
+        $contactFile = Contact::findByEmail($email);
         if (!$contactFile) {
             return new Response(json_encode(['error' => 'Contact not found']), 404);
         }

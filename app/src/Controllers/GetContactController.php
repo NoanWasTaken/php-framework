@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Http\Request;
 use App\Http\Response;
+use App\Entities\Contact;
+use App\Http\Router;
 
 class GetContactController extends AbstractController {
 
@@ -15,24 +17,14 @@ class GetContactController extends AbstractController {
         }
 
         // get the contact email from the uri
-        $uri = $request->getUri();
-        
-        if (!preg_match('/^\/contact\/(.+)$/', $uri, $matches)) {
+        $params = Router::extractParams($request->getUri(), '/contact/:email');
+        if (empty($params)) {
             return new Response(json_encode(['error' => 'Invalid URI']), 400);
         }
-        $email = $matches[1];
-
-        // set the directory to read the contact files
-        $directory = __DIR__ . "/../../var/contacts";
+        $email = $params[0];
 
         // find the contact file by email
-        $contactFile = null;
-        foreach (glob("{$directory}/*_{$email}.json") as $filename) {
-            $contactFile = $filename;
-            break;
-        }
-
-        // check if the contact file exists
+        $contactFile = Contact::findByEmail($email);
         if (!$contactFile) {
             return new Response(json_encode(['error' => 'Contact not found']), 404);
         }
